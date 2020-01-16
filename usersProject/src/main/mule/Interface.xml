@@ -3,7 +3,7 @@
 http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
     <http:listener-config name="customermanagementapi-httpListenerConfig">
-        <http:listener-connection host="0.0.0.0" port="8081" />
+        <http:listener-connection host="${http.host}" port="${http.port}" />
     </http:listener-config>
     <apikit:config name="customermanagementapi-config" api="customermanagementapi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="c219de7f-44a9-404e-9a6a-6473fb45f667" >

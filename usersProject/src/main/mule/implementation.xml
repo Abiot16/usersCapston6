@@ -5,14 +5,33 @@
 http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	
+	
 	<flow name="getAllUsers" doc:id="3c9e6684-fcdf-409d-a937-1187694e9be8" >
+		<ee:transform doc:name="Transform Message" doc:id="412d3770-e822-4556-8f9d-794c1767bb8f">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.craftsoftware.com/users
+---
+{
+	ns0#GetAllUsersRequest: null
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 		<wsc:consume operation="GetAllUsers" doc:name="Consume" doc:id="5d43db7f-bcd4-4a00-8128-5c8e6add2e34" config-ref="Web_Service_Consumer_Config"/>
-		<ee:transform doc:name="Transform Message" doc:id="52c2f2ea-6a3d-40e1-b067-b1208189a81d" >
+		<ee:transform doc:name="Transform Message" doc:id="6ce8e925-7eba-40e7-b5ca-7c1019ea1c6c" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
+ns ns0 http://www.craftsoftware.com/users
 ---
-payload.body.GetAllUsersResponse]]></ee:set-payload>
+payload.body.ns0#GetAllUsersResponse.*ns0#Users map ( user , indexOfUser ) -> {
+	id: user.ns0#id default 0,
+	first: user.ns0#fist default "",
+	last: user.ns0#last default "",
+	department: user.ns0#department default ""
+}]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 	</flow>
