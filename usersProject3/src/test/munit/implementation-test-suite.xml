@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
+	<munit:config name="implementation-test-suite.xml" />
+	<munit:test name="test-suite-getAllUsersTest" doc:id="6e13215e-f28b-41b3-9459-c0af8fa23bfa" description="Test">
+		<munit:behavior>
+			<wsc:consume operation="GetAllUsers" doc:name="Consume" doc:id="922f3ea4-254d-4535-92c7-e41f112e7976" config-ref="Web_Service_Consumer_Config"/>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="2a1c733f-1471-4b84-96fd-6d2a6904195d" >
+				<munit:payload value='{"id":1,"first":"Adam","last":"Bob","department":"IIB"}' encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value='#[   { uriParams: 
+                {id: "309"}}
+]' mediaType="application/json" />
+			</munit:set-event>
+			<try doc:name="Try" doc:id="e91b1b63-9076-411b-98a6-f1d2b2a90504" >
+				<flow-ref doc:name="Flow-ref to getAllUsers" doc:id="a342cbe9-71b5-45c5-a1db-a86a5bfd9ebc" name="getAllUsers" />
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="43af37d9-a3d5-4f04-a076-c2f5a7fd41cf" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-createUserTest" doc:id="3e9d930b-e774-4b3e-b4e1-594e50a82885" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="a6ec3858-0202-4513-b396-69ffe0604b4f" >
+				<munit:payload value='{"id":1,"first":"Adam","last":"Bob","department":"IIB"}' encoding="UTF-8" mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to createUser" doc:id="f848594f-aacc-4800-a37c-789ee1511807" name="createUser"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="21a10e0e-1b27-4683-ac5d-4a2576abebce" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-updateUserTest" doc:id="79bea777-bfaa-48aa-8429-1a4beb681fed" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="1f05e612-bba5-4480-9169-e2a62aef46f6" >
+				<munit:payload value='{"id":352,"first":"Nathan","last":"Bob","department":"IIB"}' mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to updateUser" doc:id="9be1ad43-a14f-456a-a4fe-b4235761888f" name="updateUser"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="9d36ebdb-af6e-4b5f-9801-9e980de25a9b" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-getUserByIDTest" doc:id="4b218450-1333-4a0d-b3bb-41f2d91abe06" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="39729bd2-38e9-48db-add1-4af4829a0712" >
+				<munit:attributes value="#[{uriParams: {id: 286}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to getUserByID" doc:id="c597bfd4-7c1d-4b59-9162-e58dd252d5bf" name="getUserByID"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="f5c9b51a-e192-443b-8eba-06ddb3795880" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-deleteUserTest" doc:id="d6ccde18-583c-4354-ae93-779da56a4d34" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="92d19cdc-ceaa-40c1-860e-eb40651a65e2" >
+				<munit:attributes value="#[{uriParams: {id: 351}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to deleteUser" doc:id="89f9b9c1-246d-4696-a226-0c523ecc14c0" name="deleteUser"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that doc:name="Assert that" doc:id="74ae6ccb-ad9c-40cb-aad8-0df5a54fa323" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>
