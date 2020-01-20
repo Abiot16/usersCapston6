@@ -1,0 +1,4 @@
+http:
+  port: "6010"
+  host: "localhost"
+    
